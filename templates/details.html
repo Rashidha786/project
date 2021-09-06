@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+
+{% if messages %}
+<ul class="messages">
+    {% for message in messages %}
+    <li style="color:red">{{ message }}</li>
+
+    {% endfor %}
+</ul>
+{% endif %}
+    <form action="." method="post">
+        {% csrf_token %}
+
+
+        <h>Reg Name: {{ object.Name }}</h>
+        <br>
+        <h>Age: {{object.Age}}</h>
+        <br>
+        <h>DOB: {{object.Dob}}</h>
+        <br>
+        <h>FName: {{object.FName}}</h>
+        <br>
+        <h>MName: {{object.MName}}</h>
+        <br>
+        <h>Gender: {{object.Gender}}</h>
+        <br>
+        <h>Qualification: {{object.Qualification}}</h>
+        <br>
+        <h>Mob: {{object.Mob}}</h>
+        <br>
+        <h>Designation: {{object.Designation}}</h>
+        <br>
+
+
+  <a href="{% url 'home:login' %}">Login</a>
+
+</body>
+</html>

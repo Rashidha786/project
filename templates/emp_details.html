@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+<h2>Employee List</h2>
+{% block content %}
+
+<br><br><br><br><br><br>
+<table align="center" border="1 px solid black">
+
+    <tr>
+
+
+        <th>Name</th>
+        <th>Mobile</th>
+        <th>Designation</th>
+        <th> Action</th>
+    </tr>
+
+
+    {% for object in objects %}
+    <tr>
+
+        <td>{{ object.Name }}</td>
+
+        <td>{{ object.Mob }}</td>
+        <td>{{ object.Designation }}</td>
+        <td><a href="{% url 'home:emp_delete' object.id %}">Delete</a> <a href="{% url 'home:emp_update' object.id %}">Update</a></td>
+
+
+    </tr>
+
+
+    {% endfor %}
+
+
+</table>
+
+<br><br><br><br><br><br>
+   {% endblock %}

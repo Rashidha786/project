@@ -1,0 +1,29 @@
+
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<h1>
+    Admin_Home<br><br><br><br><br><br>
+
+
+    <a href="{% url 'home:emp_details' %}">
+        <button type="button" name="empdetails" value="empdetails" id="empdetails"> Employee Details</button>
+    </a>
+    <div class="search-container">
+        <form action="{% url 'home:search' %}">
+            <input type="text" placeholder="Search.." name="search">
+            <button type="submit"><i class="fa fa-search"></i></button>
+        </form>
+    </div>
+    <a href="{% url 'home:login' %}">
+        <button type="button" name="logout" value="logout" id="logout"> LOGOUT</button>
+    </a>
+
+
+</h1>
+{% endblock %}
+
+

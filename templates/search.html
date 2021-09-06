@@ -1,0 +1,5 @@
+{% for ob in obj %}
+
+><a href="{% url 'home:search_details' ob.id %}">{{ ob.Name }}</a>
+
+{% endfor %}
