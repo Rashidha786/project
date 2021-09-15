@@ -1,5 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<br>  <br>  <br>  <br>  <br>  <br>  
+
+
+
 {% for ob in obj %}
 
-><a href="{% url 'home:search_details' ob.id %}">{{ ob.Name }}</a>
+<a href="{% url 'home:search_details' ob.id %}">{{ ob.Name }}</a>
 
 {% endfor %}
+
+
+<br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>  <br>
+
+
+
+{% endblock %}

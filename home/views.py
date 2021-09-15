@@ -16,6 +16,8 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.encoding import force_bytes
 from .models import Courses
 from django.db.models import Q
+from django.conf import settings
+from django.core.mail import send_mail
 
 from .forms import RegisterForm
 
@@ -139,6 +141,12 @@ def register(request):
                     # Name,Age...=Database values $$  name,age....== variable
 
                     messages.success(request, 'Registration Success')  # write code in html also
+                    subject = 'welcome to GFG world'
+                    message = f'Hi {username}, thank you for registering in geeksforgeeks.'
+                    email_from = settings.EMAIL_HOST_USER
+                    recipient_list = [email, ]
+                    send_mail( subject, message, email_from, recipient_list )
+
                     return render(request, 'login.html')
 
         except Exception as e:
@@ -253,3 +261,29 @@ def dummy_register(request):
     form = RegisterForm()
     print(form)
     return render(request, 'dummy_register.html', {'form': form})
+
+
+@login_required(login_url='/login/')
+def blog(request):
+    return render(request, 'blog.html')
+
+
+@login_required(login_url='/login/')
+def post(request):
+    return render(request, 'post.html')
+
+
+@login_required(login_url='/login/')
+def contact(request):
+    return render(request, 'contact.html')
+
+    
+@login_required(login_url='/login/')
+def subscribe(request):
+    subject = 'welcome to GFG world'
+    message = f'Hi {request.user.username}, thank you for registering in geeksforgeeks.'
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [request.user.email, ]
+    send_mail( subject, message, email_from, recipient_list )
+
+    return render(request, 'subscribe.html')
