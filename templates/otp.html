@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<label for="ot"><b>OTP</b></label>
+<form action="{% url 'home:otp_login' %}">
+    <input type="text" placeholder="Enter Your OTP" name="otp" id="ot">
+    <input type="submit" value="ok">
+</form>
+
+{% endblock  %}

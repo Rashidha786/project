@@ -12,6 +12,14 @@
     <a href="{% url 'home:emp_details' %}">
         <button type="button" name="empdetails" value="empdetails" id="empdetails"> Employee Details</button>
     </a>
+
+    <br><br>
+
+
+    <a href="{% url 'home:otp' %}">
+        <button type="button" name="otp" value="otp" id="otp"> OTP </button>
+    </a>
+
     <div class="search-container">
         <form action="{% url 'home:search' %}">
             <input type="text" placeholder="Search.." name="search">

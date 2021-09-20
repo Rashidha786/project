@@ -8,6 +8,11 @@
 Student_Home<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 
 
+    <a href="{% url 'home:otp' %}">
+        <button type="button" name="otp" value="otp" id="otp"> OTP </button>
+    </a>
+<br><br><br><br><br><br><br>
+
 <script>
     function course(course_name) {
             var url = "{%  url 'home:course_details' 'slug' %}"

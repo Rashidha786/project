@@ -18,8 +18,21 @@ from .models import Courses
 from django.db.models import Q
 from django.conf import settings
 from django.core.mail import send_mail
+import os
+import math
+import random
+import smtplib
 
 from .forms import RegisterForm
+
+
+def otp():
+    digits = "0123456789"
+    OTP = ""
+    for i in range(6):
+        OTP += digits[math.floor(random.random() * 10)]
+
+    return OTP
 
 
 def password_reset_request(request):
@@ -145,7 +158,7 @@ def register(request):
                     message = f'Hi {username}, thank you for registering in geeksforgeeks.'
                     email_from = settings.EMAIL_HOST_USER
                     recipient_list = [email, ]
-                    send_mail( subject, message, email_from, recipient_list )
+                    send_mail(subject, message, email_from, recipient_list)
 
                     return render(request, 'login.html')
 
@@ -158,29 +171,70 @@ def register(request):
 
 
 def log_in(request):
-    if request.method == 'GET':
-        return render(request, 'login.html')
-    else:
+    if request.method == 'POST':
         username = request.POST.get('username')
         password = request.POST.get('password')
         user = authenticate(request, username=username, password=password)
 
         if user is not None:
-            login(request, user)
-            obj = Register.objects.filter(user=user)
+            otp1 = otp()
+            # f = open("otpfile.txt", "w")
+            # f.write(otp1 + '\n')
+            # f.write(username + '\n')
+            # f.write(password + '\n')
+            # print(otp1)
+            subject = 'otp'
+            message = f'Hi {user.username}, {otp1}'
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [user.email, ]
+            send_mail(subject, message, email_from, recipient_list)
 
-            print(obj[0])
-            if (obj[0].Designation == 'Student'):
-                return redirect('home:student_home')
-            elif (obj[0].Designation == 'Teacher'):
-                return redirect('home:teacher_home')
-            elif (obj[0].Designation == 'Staff'):
-                return redirect('home:staff_home')
-            elif (obj[0].Designation == 'Admin'):
-                return redirect('home:admin_home')
+            request.session['username'] = username
+            request.session['password'] = password
+            request.session['otp'] = otp1
+
+            return render(request, 'otp.html')
         else:
             messages.error(request, 'Invalid UserName or Password')
-            return render(request, 'login.html')
+    else:
+
+        return render(request, 'login.html')
+
+
+def otp_login(request):
+    verify_otp = request.GET.get('otp')
+    # f = open("otpfile.txt", "r")
+    # print('@@@@@@@@@@@@@@@@@@@@')
+    # otp = f.readline()
+    # username = f.readline()
+    # password = f.readline()
+    u = request.session.get('username')
+    p = request.session.get('password')
+    o = request.session.get('otp')
+    print(u, p, o)
+
+
+    if verify_otp == o:
+        user = authenticate(request, username=u, password=p)
+        print(user)
+        if user is not None:
+            login(request,user)
+            obj = Register.objects.get(user=request.user)
+            if obj.Designation == 'Student':
+                return render(request, 'student_home.html')
+            elif obj.Designation == 'Admin':
+                return redirect('home:admin_home')
+            elif obj.Designation == 'Teacher':
+                return redirect('home:teacher_home')
+            elif obj.Designation == 'Student':
+                return redirect('home:student_home')
+        else:
+            messages.error(request, "User not Exists")
+            return redirect('home:login')
+
+    else:
+        messages.error(request, "Wrong OTP")
+        return redirect('home:login')
 
 
 def course_details(request, the_slug):  # the_slug code in html also
@@ -252,7 +306,6 @@ def search(request):
 
 
 def search_details(request, pk):
-
     obj = Register.objects.get(id=pk)
     return render(request, "search_details.html", {'obj': obj})
 
@@ -277,13 +330,13 @@ def post(request):
 def contact(request):
     return render(request, 'contact.html')
 
-    
+
 @login_required(login_url='/login/')
 def subscribe(request):
     subject = 'welcome to GFG world'
     message = f'Hi {request.user.username}, thank you for registering in geeksforgeeks.'
     email_from = settings.EMAIL_HOST_USER
     recipient_list = [request.user.email, ]
-    send_mail( subject, message, email_from, recipient_list )
+    send_mail(subject, message, email_from, recipient_list)
 
     return render(request, 'subscribe.html')
